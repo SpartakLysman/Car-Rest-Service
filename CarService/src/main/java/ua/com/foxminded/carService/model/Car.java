@@ -1,5 +1,8 @@
 package ua.com.foxminded.carService.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,14 +34,14 @@ public class Car {
 
 	@ManyToMany
 	@JoinTable(name = "car_category", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Category category;
+	private List<Category> categories = new ArrayList<>();
 
-	public Car(String id, String model, int year, Make make, Category category) {
+	public Car(String id, String model, int year, Make make, List<Category> categories) {
 		this.id = id;
 		this.model = model;
 		this.year = year;
 		this.make = make;
-		this.category = category;
+		this.categories = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -57,8 +60,8 @@ public class Car {
 		return make;
 	}
 
-	public Category getCategory() {
-		return category;
+	public List<Category> getCategories() {
+		return categories;
 	}
 
 	public void setId(String id) {
@@ -77,12 +80,12 @@ public class Car {
 		this.make = make;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 	public String toString() {
-		return "Id: " + id + ",  Model: " + model + ",  Year: " + year + ",  Make: " + make + ",  Category: "
-				+ category;
+		return "Id: " + id + ",  Model: " + model + ",  Year: " + year + ",  Make: " + make + ",  Categories: "
+				+ categories;
 	}
 }
