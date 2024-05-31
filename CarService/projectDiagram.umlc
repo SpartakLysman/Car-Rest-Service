@@ -3,7 +3,7 @@
   associations="true" dependencies="false" nesting-rel="true" router="FAN">  
   <class id="1" language="java" name="ua.com.foxminded.carService.model.Car" project="CarService" 
     file="/CarService/src/main/java/ua/com/foxminded/carService/model/Car.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="607" y="282"/>    
+    <position height="371" width="221" x="461" y="62"/>    
     <display resize-to-fit="true" stereotype="true" package="true" default-value="false" signature="true" sort="true" 
       accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="false"/>      
@@ -13,7 +13,7 @@
   <class id="2" language="java" name="ua.com.foxminded.carService.model.Category" project="CarService" 
     file="/CarService/src/main/java/ua/com/foxminded/carService/model/Category.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="965" y="283"/>    
+    <position height="-1" width="-1" x="934" y="249"/>    
     <display resize-to-fit="true" stereotype="true" package="true" default-value="false" signature="true" sort="true" 
       accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="false"/>      
@@ -22,7 +22,7 @@
   </class>  
   <class id="3" language="java" name="ua.com.foxminded.carService.model.Make" project="CarService" 
     file="/CarService/src/main/java/ua/com/foxminded/carService/model/Make.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="274" y="281"/>    
+    <position height="-1" width="-1" x="253" y="247"/>    
     <display resize-to-fit="true" stereotype="true" package="true" default-value="false" signature="true" sort="true" 
       accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="false"/>      
@@ -30,23 +30,23 @@
     </display>  
   </class>  
   <association id="4">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="5" name="category"/>      
-      <multiplicity id="6" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="7">    
-    <bendpoint x="398" y="324"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="8" name="cars"/>      
-      <multiplicity id="9" minimum="0" maximum="2147483647"/>    
+      <attribute id="5" name="cars"/>      
+      <multiplicity id="6" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <association id="7">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="8" name="category"/>      
+      <multiplicity id="9" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <association id="10">    
+    <bendpoint x="397" y="295"/>    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="11" name="make"/>      
       <multiplicity id="12" minimum="0" maximum="1"/>    
@@ -55,7 +55,7 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="13">    
-    <bendpoint x="812" y="327"/>    
+    <bendpoint x="761" y="291"/>    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="14" name="cars"/>      
       <multiplicity id="15" minimum="0" maximum="2147483647"/>    

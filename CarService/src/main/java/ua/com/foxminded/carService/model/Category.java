@@ -6,7 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Table(name = "category")
@@ -21,7 +21,7 @@ public class Category {
 	@Column(name = "categoryName")
 	private String categoryName;
 
-	@OneToMany(mappedBy = "category")
+	@ManyToMany(mappedBy = "categories")
 	private List<Car> cars;
 
 	public Category(long categoryId, String categoryName) {

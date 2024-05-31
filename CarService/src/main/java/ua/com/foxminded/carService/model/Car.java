@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -27,8 +29,8 @@ public class Car {
 	@JoinColumn(name = "makeId", nullable = false)
 	private Make make;
 
-	@ManyToOne
-	@JoinColumn(name = "categoryId", nullable = false)
+	@ManyToMany
+	@JoinTable(name = "car_category", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Category category;
 
 	public Car(String id, String model, int year, Make make, Category category) {
