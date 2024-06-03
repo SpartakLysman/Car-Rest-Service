@@ -24,48 +24,86 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.search</groupId>
+			<artifactId>hibernate-search-mapper-orm-orm6</artifactId>
+			<version>6.2.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.search</groupId>
+			<artifactId>hibernate-search-backend-lucene</artifactId>
+			<version>6.2.1.Final</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			</dependency>
+		
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.7-1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+			<version>0.30</version>
+		</dependency>
+		<dependency>
+			<groupId>ua.com.foxminded.javaspring</groupId>
+			<artifactId>TaskOne</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

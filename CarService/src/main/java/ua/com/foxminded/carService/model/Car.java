@@ -44,6 +44,24 @@ public class Car {
 		this.categories = new ArrayList<>();
 	}
 
+	public Car(String id, String model, int year, Make make) {
+		this.id = id;
+		this.model = model;
+		this.year = year;
+		this.make = make;
+	}
+
+	public Car(String model, int year, Make make, List<Category> categories) {
+		this.model = model;
+		this.year = year;
+		this.make = make;
+		this.categories = new ArrayList<>();
+	}
+
+	public Car() {
+
+	}
+
 	public String getId() {
 		return id;
 	}

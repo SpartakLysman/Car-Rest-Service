@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- ChangeSet to create 'make', 'category', 'car' tables -->
+    <changeSet id="1" author="yourname">
+        <createTable tableName="make">
+            <column name="make_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="make_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    
+    <changeSet id="2" author="yourname">
+        <createTable tableName="category">
+            <column name="category_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="category_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+   
+    <changeSet id="3" author="yourname">
+        <createTable tableName="car">
+            <column name="object_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="year" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="make_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Foreign key for 'make_id' in 'car' table -->
+        <addForeignKeyConstraint 
+            baseTableName="car" 
+            baseColumnNames="make_id" 
+            referencedTableName="make" 
+            referencedColumnNames="make_id"/>
+    </changeSet>
+
+    <!-- ChangeSet to create 'car_category' table -->
+    <changeSet id="4" author="yourname">
+        <createTable tableName="car_category">
+            <column name="car_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Foreign key for 'car_id' in 'car_category' table -->
+        <addForeignKeyConstraint 
+            baseTableName="car_category" 
+            baseColumnNames="car_id" 
+            referencedTableName="car" 
+            referencedColumnNames="object_id"/>
+
+        <!-- Foreign key for 'category_id' in 'car_category' table -->
+        <addForeignKeyConstraint 
+            baseTableName="car_category" 
+            baseColumnNames="category_id" 
+            referencedTableName="category" 
+            referencedColumnNames="category_id"/>
+
+        <!-- Composite primary key constraint for 'car_category' table -->
+        <addPrimaryKey 
+            tableName="car_category" 
+            columnNames="car_id, category_id"/>
+    </changeSet>
+</databaseChangeLog>

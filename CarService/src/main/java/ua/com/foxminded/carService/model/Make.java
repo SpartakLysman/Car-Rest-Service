@@ -29,6 +29,14 @@ public class Make {
 		this.makeName = makeName;
 	}
 
+	public Make(String makeName) {
+		this.makeName = makeName;
+	}
+
+	public Make() {
+
+	}
+
 	public Long getMakeId() {
 		return makeId;
 	}
