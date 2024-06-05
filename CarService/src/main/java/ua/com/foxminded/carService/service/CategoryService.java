@@ -12,6 +12,7 @@ import ua.com.foxminded.carService.repository.CategoryRepository;
 
 @Service
 public class CategoryService {
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 

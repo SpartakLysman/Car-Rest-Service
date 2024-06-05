@@ -15,9 +15,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,7 +32,7 @@ public class CarControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	@MockBean
+	@Mock
 	private CarService carService;
 
 	@Autowired

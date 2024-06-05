@@ -70,7 +70,8 @@
             baseTableName="car_category" 
             baseColumnNames="car_id" 
             referencedTableName="car" 
-            referencedColumnNames="object_id"/>
+            referencedColumnNames="object_id"
+            constraintName="car_category_car_id_fk"/>
 
         <!-- Foreign key for 'category_id' in 'car_category' table -->
         <addForeignKeyConstraint 

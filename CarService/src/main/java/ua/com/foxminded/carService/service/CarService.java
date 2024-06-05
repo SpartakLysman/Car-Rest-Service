@@ -14,6 +14,7 @@ import ua.com.foxminded.carService.repository.CarRepository;
 
 @Service
 public class CarService {
+
 	@Autowired
 	private CarRepository carRepository;
 
