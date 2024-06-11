@@ -43,7 +43,8 @@ public class CarControllerTest {
 	@BeforeEach
 	void setUp() {
 		car = new Car();
-		car.setId("4q7L00AU2S");
+		car.setId(1);
+		car.setObjectId("4q7L00AU2S");
 		car.setYear(2001);
 		car.setModel("Corolla");
 	}

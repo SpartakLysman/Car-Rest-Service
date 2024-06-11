@@ -8,7 +8,7 @@
     <!-- create a temporary table -->
     <changeSet id="1" author="yourname">
         <createTable tableName="temp_car_data">
-            <column name="object_id" type="BIGINT"/>
+            <column name="object_id" type="VARCHAR(255)"/>
             <column name="make" type="VARCHAR(255)"/>
             <column name="year" type="INT"/>
             <column name="model" type="VARCHAR(255)"/>

@@ -51,7 +51,8 @@ public class ManufacturerModelControllerTest {
 		make.setMakeName("Toyota");
 
 		car = new Car();
-		car.setId("yg563v3hRm");
+		car.setId(1);
+		car.setObjectId("99klWfTOAe");
 		car.setYear(2001);
 		car.setModel("Corolla");
 		car.setMake(make);
