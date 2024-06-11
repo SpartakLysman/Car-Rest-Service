@@ -19,8 +19,11 @@ public class Car {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private long id;
+
 	@Column(name = "objectId")
-	private String id;
+	private String objectId;
 
 	@Column(name = "model")
 	private String model;
@@ -36,19 +39,29 @@ public class Car {
 	@JoinTable(name = "car_category", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Category> categories = new ArrayList<>();
 
-	public Car(String id, String model, int year, Make make, List<Category> categories) {
+	public Car(long id, String objectId, String model, int year, Make make, List<Category> categories) {
 		this.id = id;
+		this.objectId = objectId;
 		this.model = model;
 		this.year = year;
 		this.make = make;
 		this.categories = new ArrayList<>();
 	}
 
-	public Car(String id, String model, int year, Make make) {
+	public Car(long id, String objectId, String model, int year, Make make) {
 		this.id = id;
+		this.objectId = objectId;
 		this.model = model;
 		this.year = year;
 		this.make = make;
+	}
+
+	public Car(String objectId, String model, int year, Make make, List<Category> categories) {
+		this.objectId = objectId;
+		this.model = model;
+		this.year = year;
+		this.make = make;
+		this.categories = new ArrayList<>();
 	}
 
 	public Car(String model, int year, Make make, List<Category> categories) {
@@ -62,8 +75,12 @@ public class Car {
 
 	}
 
-	public String getId() {
+	public long getId() {
 		return id;
+	}
+
+	public String getObjectId() {
+		return objectId;
 	}
 
 	public String getModel() {
@@ -82,8 +99,12 @@ public class Car {
 		return categories;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
+	}
+
+	public void setObjectId(String objectId) {
+		this.objectId = objectId;
 	}
 
 	public void setModel(String model) {
@@ -103,7 +124,7 @@ public class Car {
 	}
 
 	public String toString() {
-		return "Id: " + id + ",  Model: " + model + ",  Year: " + year + ",  Make: " + make + ",  Categories: "
-				+ categories;
+		return "Id: " + id + ", Object id: " + objectId + ",  Model: " + model + ",  Year: " + year + ",  Make: " + make
+				+ ",  Categories: " + categories;
 	}
 }

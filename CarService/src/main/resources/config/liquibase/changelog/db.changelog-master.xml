@@ -19,9 +19,15 @@
     <!-- load data into temporary  -->
     <changeSet id="2" author="yourname">
         <loadData file="config/liquibase/data/file.csv"
-                  tableName="temp_car_data"
-                  separator=","
-                  encoding="UTF-8"/>
+              tableName="temp_car_data"
+              separator=","
+              encoding="UTF-8">
+        <column header="objectId" name="object_id" type="VARCHAR(255)"/>
+        <column header="Make" name="make" type="VARCHAR(255)"/>
+        <column header="Year" name="year" type="INT"/>
+        <column header="Model" name="model" type="VARCHAR(255)"/>
+        <column header="Category" name="category" type="VARCHAR(255)"/>
+    </loadData>
     </changeSet>
 
     <!-- create 'make', 'category', 'car' -->
@@ -49,8 +55,11 @@
 
     <changeSet id="5" author="yourname">
         <createTable tableName="car">
-            <column name="object_id" type="BIGINT" autoIncrement="true">
+       		<column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="object_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
             </column>
             <column name="year" type="INT">
                 <constraints nullable="false"/>
