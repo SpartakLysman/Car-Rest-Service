@@ -55,11 +55,11 @@
 
     <changeSet id="5" author="yourname">
         <createTable tableName="car">
-       		<column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="object_id" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="year" type="INT">
                 <constraints nullable="false"/>
@@ -97,7 +97,7 @@
             baseTableName="car_category" 
             baseColumnNames="car_id" 
             referencedTableName="car" 
-            referencedColumnNames="object_id"
+            referencedColumnNames="id"
             constraintName="fk_car_category_car_id"/>
 
         <!-- Foreign key for 'category_id' in 'car_category' -->
@@ -136,9 +136,10 @@
         </sql>
         <sql>
             INSERT INTO car_category (car_id, category_id)
-            SELECT t.object_id, c.category_id
-            FROM temp_car_data t
-            JOIN category c ON t.category = c.category_name;
+            SELECT c.id, cat.category_id
+            FROM car c
+            JOIN temp_car_data t ON c.object_id = t.object_id
+            JOIN category cat ON t.category = cat.category_name;
         </sql>
     </changeSet>
 
