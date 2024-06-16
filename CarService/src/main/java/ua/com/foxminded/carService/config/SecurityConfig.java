@@ -3,6 +3,7 @@ package ua.com.foxminded.carService.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,11 +27,14 @@ import ua.com.foxminded.carService.security.AudienceValidator;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Value("${auth0.audience}")
-	private String audience;
+	private final String audience;
+	private final String issuer;
 
-	@Value("${auth0.issuer}")
-	private String issuer;
+	public SecurityConfig(@Value("${auth0.audience}") String audience,
+			@Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer) {
+		this.audience = audience;
+		this.issuer = issuer;
+	}
 
 	protected void configure(HttpSecurity http) throws Exception {
 		JwtWebSecurityConfigurer.forRS256(audience, issuer).configure(http).authorizeRequests()
@@ -44,16 +48,17 @@ public class SecurityConfig {
 				.decoder(jwtDecoder());
 	}
 
+	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedMethods(List.of(HttpMethod.GET.name(), HttpMethod.PUT.name(), HttpMethod.POST.name(),
 				HttpMethod.DELETE.name()));
-
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
 		return source;
 	}
 
+	@Bean
 	JwtDecoder jwtDecoder() {
 		OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator(audience);
 		OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
