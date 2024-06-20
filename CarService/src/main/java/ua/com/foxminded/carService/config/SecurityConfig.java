@@ -38,6 +38,7 @@ public class SecurityConfig {
 
 	protected void configure(HttpSecurity http) throws Exception {
 		JwtWebSecurityConfigurer.forRS256(audience, issuer).configure(http).authorizeRequests()
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/v1/cars/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/v1/manufacturers/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
