@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- create a temporary table -->
+    <changeSet id="1" author="yourname">
+        <createTable tableName="temp_car_data">
+            <column name="object_id" type="VARCHAR(255)"/>
+            <column name="make" type="VARCHAR(255)"/>
+            <column name="year" type="INT"/>
+            <column name="model" type="VARCHAR(255)"/>
+            <column name="category" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- load data into temporary  -->
+    <changeSet id="2" author="yourname">
+        <loadData file="config/liquibase/data/file.csv"
+              tableName="temp_car_data"
+              separator=","
+              encoding="UTF-8">
+        <column header="objectId" name="object_id" type="VARCHAR(255)"/>
+        <column header="Make" name="make" type="VARCHAR(255)"/>
+        <column header="Year" name="year" type="INT"/>
+        <column header="Model" name="model" type="VARCHAR(255)"/>
+        <column header="Category" name="category" type="VARCHAR(255)"/>
+    </loadData>
+    </changeSet>
+
+    <!-- create 'make', 'category', 'car' -->
+    <changeSet id="3" author="yourname">
+        <createTable tableName="make">
+            <column name="make_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="make_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="yourname">
+        <createTable tableName="category">
+            <column name="category_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="category_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="yourname">
+        <createTable tableName="car">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="object_id" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="year" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="make_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Foreign key 'make_id' in 'car' -->
+        <addForeignKeyConstraint 
+            baseTableName="car" 
+            baseColumnNames="make_id" 
+            referencedTableName="make" 
+            referencedColumnNames="make_id"
+            constraintName="fk_car_make"/>
+    </changeSet>
+
+    <!-- create 'car_category' table -->
+    <changeSet id="6" author="yourname">
+        <createTable tableName="car_category">
+            <column name="car_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Foreign key for 'car_id' in 'car_category' -->
+        <addForeignKeyConstraint 
+            baseTableName="car_category" 
+            baseColumnNames="car_id" 
+            referencedTableName="car" 
+            referencedColumnNames="id"
+            constraintName="fk_car_category_car_id"/>
+
+        <!-- Foreign key for 'category_id' in 'car_category' -->
+        <addForeignKeyConstraint 
+            baseTableName="car_category" 
+            baseColumnNames="category_id" 
+            referencedTableName="category" 
+            referencedColumnNames="category_id"
+            constraintName="fk_car_category_category_id"/>
+
+        <!-- Composite primary key constraint for 'car_category' table -->
+        <addPrimaryKey 
+            tableName="car_category" 
+            columnNames="car_id, category_id"/>
+    </changeSet>
+
+    <!-- transfer data from temporary to normalized tables -->
+    <changeSet id="7" author="yourname">
+        <sql>
+            INSERT INTO make (make_name)
+            SELECT DISTINCT make
+            FROM temp_car_data
+            WHERE make IS NOT NULL;
+        </sql>
+        <sql>
+            INSERT INTO category (category_name)
+            SELECT DISTINCT category
+            FROM temp_car_data
+            WHERE category IS NOT NULL;
+        </sql>
+        <sql>
+            INSERT INTO car (object_id, year, model, make_id)
+            SELECT t.object_id, t.year, t.model, m.make_id
+            FROM temp_car_data t
+            JOIN make m ON t.make = m.make_name;
+        </sql>
+        <sql>
+            INSERT INTO car_category (car_id, category_id)
+            SELECT c.id, cat.category_id
+            FROM car c
+            JOIN temp_car_data t ON c.object_id = t.object_id
+            JOIN category cat ON t.category = cat.category_name;
+        </sql>
+    </changeSet>
+
+    <!-- drop the temporary table -->
+    <changeSet id="8" author="yourname">
+        <dropTable tableName="temp_car_data"/>
+    </changeSet>
+
+</databaseChangeLog>
