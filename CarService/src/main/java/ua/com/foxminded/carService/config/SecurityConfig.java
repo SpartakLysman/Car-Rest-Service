@@ -21,8 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
 
-import ua.com.foxminded.carService.security.AudienceValidator;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -61,7 +59,7 @@ public class SecurityConfig {
 
 	@Bean
 	JwtDecoder jwtDecoder() {
-		OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator(audience);
+		OAuth2TokenValidator<Jwt> withAudience = new OAuth2TokenValidator<Jwt>(audience);
 		OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
 		OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withAudience, withIssuer);
 
