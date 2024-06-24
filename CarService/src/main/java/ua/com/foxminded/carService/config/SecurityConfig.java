@@ -59,7 +59,7 @@ public class SecurityConfig {
 
 	@Bean
 	JwtDecoder jwtDecoder() {
-		OAuth2TokenValidator<Jwt> withAudience = new OAuth2TokenValidator<Jwt>(audience);
+		OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator(audience);
 		OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
 		OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withAudience, withIssuer);
 
