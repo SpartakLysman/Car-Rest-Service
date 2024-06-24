@@ -18,7 +18,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.boot.version>2.7.1</spring.boot.version> <!-- Specify the Spring
+		<spring.boot.version>3.2.3</spring.boot.version> <!-- Specify the Spring
 		Boot version here -->
 	</properties>
 
@@ -140,11 +140,6 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>webjars-locator</artifactId>
 			<version>0.30</version>
-		</dependency>
-		<dependency>
-			<groupId>ua.com.foxminded.javaspring</groupId>
-			<artifactId>TaskOne</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
