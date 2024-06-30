@@ -1,37 +1,49 @@
 package ua.com.foxminded.CarService.controllerTest;
 
+import java.util.Arrays;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 import ua.com.foxminded.carService.controller.CarController;
+import ua.com.foxminded.carService.model.Car;
+import ua.com.foxminded.carService.model.Category;
+import ua.com.foxminded.carService.model.Make;
+import ua.com.foxminded.carService.service.CarService;
 
 @WebMvcTest(CarController.class)
 public class CarControllerTest {
 
-//	@Autowired
-//	private MockMvc mockMvc;
-//
-//	@MockBean
-//	private CarService carService;
-//
-//	@InjectMocks
-//	private CarController carController;
-//
-//	private Car car1;
-//	private Car car2;
-//	private Make make;
-//	private Category category;
-//
-//	@BeforeEach
-//	public void setup() {
-//		MockitoAnnotations.openMocks(this);
-//
-//		make = new Make(1L, "Toyota");
-//		category = new Category(1L, "SUV");
-//
-//		car1 = new Car(1L, "obj1", "Camry", 2020, make, Arrays.asList(category));
-//		car2 = new Car(2L, "obj2", "Corolla", 2021, make, Arrays.asList(category));
-//	}
-//
+	@Autowired
+	private MockMvc mockMvc;
+
+	@MockBean
+	private CarService carService;
+
+	@InjectMocks
+	private CarController carController;
+
+	private Car car1;
+	private Car car2;
+	private Make make;
+	private Category category;
+
+	@BeforeEach
+	public void setup() {
+		MockitoAnnotations.openMocks(this);
+
+		make = new Make(1L, "Toyota");
+		category = new Category(1L, "SUV");
+
+		car1 = new Car(1L, "obj1", "Camry", 2020, make, Arrays.asList(category));
+		car2 = new Car(2L, "obj2", "Corolla", 2021, make, Arrays.asList(category));
+	}
+
 //	@Test
 //	@WithMockUser(username = "admin", roles = { "USER" })
 //	public void testCreateCar() throws Exception {

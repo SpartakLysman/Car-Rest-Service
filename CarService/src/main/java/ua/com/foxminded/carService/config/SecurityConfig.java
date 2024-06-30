@@ -47,21 +47,6 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-//	@Bean
-//	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-//		http.csrf(AbstractHttpConfigurer::disable)
-//				.authorizeHttpRequests(
-//						requests -> requests.requestMatchers("/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**")
-//								.permitAll().requestMatchers(HttpMethod.GET, "/api/v1/cars/**").permitAll()
-//								.requestMatchers(HttpMethod.GET, "/api/v1/manufacturers/**").permitAll()
-//								.requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-//								.requestMatchers(HttpMethod.POST, "/api/v1/**").permitAll()
-//								.requestMatchers(HttpMethod.PUT, "/api/v1/**").permitAll()
-//								.requestMatchers(HttpMethod.DELETE, "/api/v1/**").permitAll().anyRequest().permitAll())
-//				.oauth2ResourceServer(server -> server.jwt(Customizer.withDefaults()));
-//		return http.build();
-//	}
-
 	@Bean
 	public JwtDecoder jwtDecoder() {
 		OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator(audience);
