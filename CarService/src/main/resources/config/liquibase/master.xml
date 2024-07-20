@@ -6,7 +6,3 @@
 	<include file="changelog/db.changelog-master.xml"
 		relativeToChangelogFile="true" />
 </databaseChangeLog>
-
-<!-- <include file="classpath:config/liquibase/changelog/00000000000000_initial_schema.xml" 
-	relativeToChangelogFile="false" /> <include file="classpath:config/liquibase/changelog/20170503041524_added_entity_Car.xml" 
-	relativeToChangelogFile="false" /> -->
