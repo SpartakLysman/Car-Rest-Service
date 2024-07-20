@@ -23,14 +23,14 @@ import ua.com.foxminded.carService.security.AudienceValidator;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private final String audience;
-	private final String issuer;
+    private final String audience;
+    private final String issuer;
 
-	public SecurityConfig(@Value("${auth0.audience}") String audience,
-			@Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer) {
-		this.audience = audience;
-		this.issuer = issuer;
-	}
+    public SecurityConfig(@Value("${auth0.audience}") String audience,
+                          @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer) {
+        this.audience = audience;
+        this.issuer = issuer;
+    }
 
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
