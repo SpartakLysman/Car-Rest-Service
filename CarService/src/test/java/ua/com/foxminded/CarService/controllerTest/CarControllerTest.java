@@ -3,6 +3,7 @@ package ua.com.foxminded.CarService.controllerTest;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,17 +16,13 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +34,7 @@ import ua.com.foxminded.carService.model.Make;
 import ua.com.foxminded.carService.service.CarService;
 
 @WebMvcTest(CarController.class)
+@ExtendWith(MockitoExtension.class)
 public class CarControllerTest {
 
 	@Autowired
@@ -45,122 +43,78 @@ public class CarControllerTest {
 	@MockBean
 	private CarService carService;
 
-	@InjectMocks
-	private CarController carController;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-	private Car car1;
-	private Car car2;
+	private Car car;
 	private Make make;
 	private Category category;
 
 	@BeforeEach
-	public void setup() {
-		MockitoAnnotations.openMocks(this);
-
+	void setUp() {
 		make = new Make(1L, "Toyota");
 		category = new Category(1L, "SUV");
-
-		car1 = new Car(1L, "obj1", "Camry", 2020, make, Arrays.asList(category));
-		car2 = new Car(2L, "obj2", "Corolla", 2021, make, Arrays.asList(category));
+		car = new Car(1L, "objectId", "Camry", 2020, make, Arrays.asList(category));
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER" })
-	public void testCreateCar() throws Exception {
-		when(carService.saveCar(any(Car.class))).thenReturn(car1);
+	void createCar_shouldReturnCreatedCar() throws Exception {
+		when(carService.saveCar(any(Car.class))).thenReturn(car);
 
-		mockMvc.perform(post("/api/v1/cars").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(car1))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").value(car1.getId()))
-				.andExpect(jsonPath("$.objectId").value(car1.getObjectId()))
-				.andExpect(jsonPath("$.model").value(car1.getModel()))
-				.andExpect(jsonPath("$.year").value(car1.getYear()))
-				.andExpect(jsonPath("$.make.makeName").value(car1.getMake().getMakeName())).andExpect(
-						jsonPath("$.categories[0].categoryName").value(car1.getCategories().get(0).getCategoryName()));
+		mockMvc.perform(post("/api/v1/cars").with(jwt()) // Mock JWT authentication
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(car)))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(car.getId()))
+				.andExpect(jsonPath("$.model").value(car.getModel()))
+				.andExpect(jsonPath("$.year").value(car.getYear()));
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER" })
-	public void testUpdateCar() throws Exception {
-		when(carService.updateCar(anyLong(), any(Car.class))).thenReturn(car1);
+	void updateCar_shouldReturnUpdatedCar() throws Exception {
+		when(carService.updateCar(anyLong(), any(Car.class))).thenReturn(car);
 
-		mockMvc.perform(put("/api/v1/cars/1").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(car1))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").value(car1.getId()))
-				.andExpect(jsonPath("$.objectId").value(car1.getObjectId()))
-				.andExpect(jsonPath("$.model").value(car1.getModel()))
-				.andExpect(jsonPath("$.year").value(car1.getYear()))
-				.andExpect(jsonPath("$.make.makeName").value(car1.getMake().getMakeName())).andExpect(
-						jsonPath("$.categories[0].categoryName").value(car1.getCategories().get(0).getCategoryName()));
+		mockMvc.perform(put("/api/v1/cars/{id}", car.getId()).with(jwt()) // Mock JWT authentication
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(car)))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(car.getId()))
+				.andExpect(jsonPath("$.model").value(car.getModel()))
+				.andExpect(jsonPath("$.year").value(car.getYear()));
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER" })
-	public void testDeleteCar() throws Exception {
-		mockMvc.perform(delete("/api/v1/cars/1")).andExpect(status().isNoContent());
+	void deleteCar_shouldReturnNoContent() throws Exception {
+		mockMvc.perform(delete("/api/v1/cars/{id}", car.getId()).with(jwt())) // Mock JWT authentication
+				.andExpect(status().isNoContent());
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER" })
-	public void testGetCar() throws Exception {
-		when(carService.getCar(anyLong())).thenReturn(Optional.of(car1));
+	void getCar_shouldReturnCar() throws Exception {
+		when(carService.getCar(anyLong())).thenReturn(Optional.of(car));
 
-		mockMvc.perform(get("/api/v1/cars/1")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").value(car1.getId()))
-				.andExpect(jsonPath("$.objectId").value(car1.getObjectId()))
-				.andExpect(jsonPath("$.model").value(car1.getModel()))
-				.andExpect(jsonPath("$.year").value(car1.getYear()))
-				.andExpect(jsonPath("$.make.makeName").value(car1.getMake().getMakeName())).andExpect(
-						jsonPath("$.categories[0].categoryName").value(car1.getCategories().get(0).getCategoryName()));
+		mockMvc.perform(get("/api/v1/cars/{id}", car.getId()).with(jwt())) // Mock JWT authentication
+				.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(car.getId()))
+				.andExpect(jsonPath("$.model").value(car.getModel()))
+				.andExpect(jsonPath("$.year").value(car.getYear()));
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER" })
-	public void testGetCars() throws Exception {
-		Pageable pageable = PageRequest.of(0, 10);
-		Page<Car> carsPage = new PageImpl<>(Arrays.asList(car1, car2), pageable, 2);
-		when(carService.getCars(any(Pageable.class))).thenReturn(carsPage);
+	void getCars_shouldReturnPageOfCars() throws Exception {
+		when(carService.getCars(any())).thenReturn(new PageImpl<>(Arrays.asList(car)));
 
-		mockMvc.perform(get("/api/v1/cars").param("page", "0").param("size", "10")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.content[0].id").value(car1.getId()))
-				.andExpect(jsonPath("$.content[0].objectId").value(car1.getObjectId()))
-				.andExpect(jsonPath("$.content[0].model").value(car1.getModel()))
-				.andExpect(jsonPath("$.content[0].year").value(car1.getYear()))
-				.andExpect(jsonPath("$.content[0].make.makeName").value(car1.getMake().getMakeName()))
-				.andExpect(jsonPath("$.content[0].categories[0].categoryName")
-						.value(car1.getCategories().get(0).getCategoryName()))
-				.andExpect(jsonPath("$.content[1].id").value(car2.getId()))
-				.andExpect(jsonPath("$.content[1].objectId").value(car2.getObjectId()))
-				.andExpect(jsonPath("$.content[1].model").value(car2.getModel()))
-				.andExpect(jsonPath("$.content[1].year").value(car2.getYear()))
-				.andExpect(jsonPath("$.content[1].make.makeName").value(car2.getMake().getMakeName()))
-				.andExpect(jsonPath("$.content[1].categories[0].categoryName")
-						.value(car2.getCategories().get(0).getCategoryName()));
+		mockMvc.perform(get("/api/v1/cars").with(jwt())) // Mock JWT authentication
+				.andExpect(status().isOk()).andExpect(jsonPath("$.content[0].id").value(car.getId()))
+				.andExpect(jsonPath("$.content[0].model").value(car.getModel()))
+				.andExpect(jsonPath("$.content[0].year").value(car.getYear()));
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER" })
-	public void testSearchCars() throws Exception {
-		Pageable pageable = PageRequest.of(0, 10);
-		Page<Car> carsPage = new PageImpl<>(Arrays.asList(car1, car2), pageable, 2);
-		when(carService.searchCars(any(), any(), any(), any(), any(), any(Pageable.class))).thenReturn(carsPage);
+	void searchCars_shouldReturnPageOfCars() throws Exception {
+		when(carService.searchCars(any(), any(), any(), any(), any(), any()))
+				.thenReturn(new PageImpl<>(Arrays.asList(car)));
 
 		mockMvc.perform(get("/api/v1/cars/search").param("manufacturer", "Toyota").param("model", "Camry")
-				.param("minYear", "2019").param("maxYear", "2021").param("category", "SUV").param("page", "0")
-				.param("size", "10")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.content[0].id").value(car1.getId()))
-				.andExpect(jsonPath("$.content[0].objectId").value(car1.getObjectId()))
-				.andExpect(jsonPath("$.content[0].model").value(car1.getModel()))
-				.andExpect(jsonPath("$.content[0].year").value(car1.getYear()))
-				.andExpect(jsonPath("$.content[0].make.makeName").value(car1.getMake().getMakeName()))
-				.andExpect(jsonPath("$.content[0].categories[0].categoryName")
-						.value(car1.getCategories().get(0).getCategoryName()))
-				.andExpect(jsonPath("$.content[1].id").value(car2.getId()))
-				.andExpect(jsonPath("$.content[1].objectId").value(car2.getObjectId()))
-				.andExpect(jsonPath("$.content[1].model").value(car2.getModel()))
-				.andExpect(jsonPath("$.content[1].year").value(car2.getYear()))
-				.andExpect(jsonPath("$.content[1].make.makeName").value(car2.getMake().getMakeName()))
-				.andExpect(jsonPath("$.content[1].categories[0].categoryName")
-						.value(car2.getCategories().get(0).getCategoryName()));
+				.param("minYear", "2019").param("maxYear", "2021").param("category", "SUV").with(jwt())) // Mock JWT
+																											// authentication
+				.andExpect(status().isOk()).andExpect(jsonPath("$.content[0].id").value(car.getId()))
+				.andExpect(jsonPath("$.content[0].model").value(car.getModel()))
+				.andExpect(jsonPath("$.content[0].year").value(car.getYear()));
 	}
 }

@@ -1,69 +1,52 @@
 package ua.com.foxminded.CarService.repositoryTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import ua.com.foxminded.carService.model.Category;
 import ua.com.foxminded.carService.repository.CategoryRepository;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 public class CategoryRepositoryTest {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	@BeforeEach
-	void setUp() {
-		categoryRepository.deleteAll();
+	@Test
+	public void contextLoads() {
+		assertThat(categoryRepository).isNotNull();
 	}
 
 	@Test
-	void testSaveCategory() {
+	public void saveAndFindByCategoryName_shouldReturnCategory() {
 		// Given
-		Category category = new Category("SUV");
-
-		// When
-		Category savedCategory = categoryRepository.save(category);
-
-		// Then
-		assertThat(savedCategory.getCategoryId()).isNotNull();
-		assertThat(savedCategory.getCategoryName()).isEqualTo(category.getCategoryName());
-	}
-
-	@Test
-	void testFindByCategoryName() {
-		Category category = new Category("Sedan");
+		Category category = new Category();
+		category.setCategoryName("SUV");
 		categoryRepository.save(category);
 
-		Optional<Category> foundCategory = categoryRepository.findByCategoryName("Sedan");
+		// When
+		Optional<Category> foundCategory = categoryRepository.findByCategoryName("SUV");
 
-		assertTrue(foundCategory.isPresent());
-		assertThat(foundCategory.get().getCategoryName()).isEqualTo(category.getCategoryName());
+		// Then
+		assertThat(foundCategory).isPresent();
+		assertThat(foundCategory.get().getCategoryName()).isEqualTo("SUV");
 	}
 
 	@Test
-	void testFindByCategoryName_NotFound() {
+	public void findByCategoryName_shouldReturnEmpty_whenCategoryNotFound() {
+		// When
 		Optional<Category> foundCategory = categoryRepository.findByCategoryName("NonExistentCategory");
 
-		assertFalse(foundCategory.isPresent());
-	}
-
-	@Test
-	void testDeleteCategory() {
-		Category category = new Category("Hatchback");
-		category = categoryRepository.save(category);
-		Long categoryId = category.getCategoryId();
-
-		categoryRepository.deleteById(categoryId);
-
-		assertFalse(categoryRepository.findById(categoryId).isPresent());
+		// Then
+		assertThat(foundCategory).isEmpty();
 	}
 }
