@@ -1,6 +1,10 @@
-# Car-rest-service 🚙
+<div align="center">
+  <h1>📌 Car rest-service</h1>
+</div>
 
-📌 An API that can be used to monitor and view available cars.
+
+<h4>🚙 An API that can be used to monitor and view available cars.</h4>
+
 - **Description:** An API that allows you to maintain, sort, and keep track of your cars. 
 - #### Technologies used: Java, Spring(Data, Security, Web), Hibernate, Docker, OpenAPI, Liqubase. JUnit, Mockito for testing
 <br>
